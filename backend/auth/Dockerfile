@@ -1,15 +1,17 @@
 FROM node:latest
 
-RUN apt update && apt upgrade
+RUN apt-get update -y && apt-get upgrade -y
 
-RUN apt install npm
+RUN apt-get install npm -y
+
+WORKDIR /App
+
+COPY ./App /App
 
 RUN npm i
 
 RUN npm i nodemon --global
 
-COPY ./App /App
+RUN npm i ts-node --global
 
-WORKDIR /App
-
-RUN npm start
+CMD ["npm", "start"]

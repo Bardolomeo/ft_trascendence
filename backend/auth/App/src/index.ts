@@ -1,8 +1,6 @@
 import Fastify from 'fastify';
-//import { home, login, test, postLogin } from "./routes.ts";
 import fastifyFormbody from '@fastify/formbody';
-import fastifyStatic from '@fastify/static';
-import path from 'path';
+import { login, register } from './routes.ts';
 
 
 const fastify = Fastify({
@@ -11,13 +9,10 @@ const fastify = Fastify({
 
 fastify.register(fastifyFormbody);
 
-const __dirname = path.resolve(path.dirname(""));
 
 //routes
-fastify.register(home);
 fastify.register(login);
-fastify.register(test);
-fastify.register(postLogin);
+fastify.register(register);
 
 
 const start = async () => {

@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
-import { home, login, test, postLogin } from "./routes.ts";
+import { home, auth, test, postLogin } from "./routes.ts";
 import path from 'path';
 import fastifyFormbody from '@fastify/formbody';
 
@@ -20,14 +20,14 @@ fastify.register(fastifyStatic, {
 })
 
 fastify.register(fastifyStatic, {
-    root: path.join(__dirname, "/src/utils/"),
-    prefix: "/utils/",
+    root: path.join(__dirname, "/src/scripts/"),
+    prefix: "/scripts/",
     decorateReply: false
 })
 
 //routes
 fastify.register(home);
-fastify.register(login);
+fastify.register(auth);
 fastify.register(test);
 fastify.register(postLogin);
 

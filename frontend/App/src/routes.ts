@@ -20,8 +20,8 @@ export async function home (fastify, options) {
 }
 
 
-export async function login (fastify, options) {
-  await fastify.get('/login', async (request, reply) => 
+export async function auth (fastify, options) {
+  await fastify.get('/auth', async (request, reply) => 
         {
             const file = fs.readFileSync('./src/login.html', 'utf-8');
             const response = new Response(file, {

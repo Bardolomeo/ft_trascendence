@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  login-service:
+    build:
+      context: ./Login_service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./Login_service/data:/app/data
+      - shared-db:/shared # Shared volume for database access
+    env_file:
+      - ./Login_service/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  backup-service:
+    build:
+      context: ./DB_Backup
+      dockerfile: Dockerfile
+    volumes:
+      - shared-db:/shared # Access to login-service database
+      - ./DB_Backup/backups:/app/backups # Persistent backup storage
+    environment:
+      - SOURCE_DB_PATH=/shared/database.db
+      - BACKUP_DIR=/app/backups
+      - MAX_BACKUPS=7
+      - CRON_SCHEDULE=0 2 * * * # Daily at 2 AM
+    restart: unless-stopped
+    depends_on:
+      - login-service
+
+volumes:
+  shared-db: # Shared volume between services
+  database_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./Login_service/data

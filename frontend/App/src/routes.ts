@@ -20,8 +20,8 @@ export async function home (fastify, options) {
 }
 
 
-export async function auth (fastify, options) {
-  await fastify.get('/auth', async (request, reply) => 
+export async function login (fastify, options) {
+  await fastify.get('/login', async (request, reply) => 
         {
             const file = fs.readFileSync('./src/login.html', 'utf-8');
             const response = new Response(file, {
@@ -31,23 +31,41 @@ export async function auth (fastify, options) {
             await reply.send(response);
 
           })
+
+    await fastify.post('/login', async (request: Request, reply) => 
+      {
+
+            const body = JSON.stringify(request.body);
+            const response = await fetch("http://auth:3000/signIn", {
+              method: "POST",
+              headers: {"Content-Type": "application/x-www-form-urlencoded"},
+              body: body,
+            });
+            if (!response.ok)
+            {
+              const message = response.text();
+              throw new Error(`Unexpected Error occurred: ${message}`);
+            } else {
+              await reply.send(response);
+            }
+    })
 }
 
-export async function test (fastify, options) {
-  await fastify.get('/test', async (request, reply) => 
+export async function register (fastify, options) {
+  await fastify.post('/register', async (request: Request, reply) => 
         {
-            const file = fs.readFileSync('./src/test.html', 'utf-8');
-            const response = new Response(file, {
-            status: 200,
-            headers: {'Content-Type': 'text/html'}
-            },); 
-            await reply.send(response);
-        })
-}
-
-export async function postLogin (fastify, options) {
-  await fastify.post('/login', (request, reply) => 
-        {
-          reply.send(request.body);
-        })
+            const body = JSON.stringify(request.body);
+            const response = await fetch("http://auth:3000/signUp", {
+              method: "POST",
+              headers: {"Content-Type": "application/x-www-form-urlencoded"},
+              body: body
+            });
+            if (!response.ok)
+            {
+              const message = response.text();
+              throw new Error(`Unexpected Error occurred: ${message}`);
+            } else {
+              await reply.send(response);
+            }
+    }) 
 }

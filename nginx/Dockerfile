@@ -1,7 +1,10 @@
 FROM alpine:latest
 
-RUN apk update && apk upgrade && apk add nginx
 
-EXPOSE 80/tcp
+RUN apk update && apk upgrade && apk add nginx && apk add openssl
 
-CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
+COPY ./script.sh /script.sh
+
+#EXPOSE 80/tcp
+
+CMD ["sh", "./script.sh"]

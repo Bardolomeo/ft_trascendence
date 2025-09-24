@@ -1,21 +1,30 @@
 
-export async function login (fastifyInstance) {
+import qs from 'querystring';
 
-  fastifyInstance.post('/login', async (request, reply) => 
+export async function signIn (fastifyInstance) {
+
+  fastifyInstance.post('/signIn', async (request: Request, reply) => 
         {
-            const body = request.body;
-            console.log(body);
-            await reply.send(body);
+            if (request.headers.get("Content-Type") !== "application/x-www-form-urlencoded")
+                reply.send(403);
+            const body = qs.parse(request.body);
+            const response = new Response(body, {
+              status: 200,
+              headers: {"Content-Type": "application/json"},
+            })
+            await reply.send(response);
         })
 }
 
-export async function register (fastifyInstance) {
+export async function signUp (fastifyInstance) {
 
-  fastifyInstance.post('/register', async (request, reply) => 
+  fastifyInstance.post('/signUp', async (request, reply) => 
         {
-          
-            const body = request.body;
-            console.log(body);
-            await reply.send(body);
+            const body = JSON.stringify(request.body);
+            const response = new Response(body, {
+              status: 200,
+              headers: {"Content-Type": "application/json"},
+            })
+            await reply.send(response);
         })
 }

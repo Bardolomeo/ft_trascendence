@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import fastifyFormbody from '@fastify/formbody';
-import { login, register } from './routes.ts';
+import { signIn, signUp } from './routes.ts';
 
 
 const fastify = Fastify({
@@ -11,8 +11,8 @@ fastify.register(fastifyFormbody);
 
 
 //routes
-fastify.register(login);
-fastify.register(register);
+fastify.register(signIn);
+fastify.register(signUp);
 
 
 const start = async () => {

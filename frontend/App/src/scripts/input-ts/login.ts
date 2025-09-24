@@ -1,41 +1,53 @@
-var id = null;
 const DIV_HEIGHT = 65;
 
-var logButton = document.getElementById("login-login");
+const logButton = document.getElementById("login-login");
+const regButton = document.getElementById("login-new-account");
+const confirmPasswordDiv = document.getElementById("confirmPasswordDiv");
+const confirmPasswordInput = document.getElementById("input-confirm-password");
+const pwInput = document.getElementById("input-password");
 
 
-var loginToRegister = function () {
-    var regButton = document.getElementById("login-new-account");
-    var confirmPasswordDiv = document.getElementById("confirmPasswordDiv");
-    var confirmPasswordInput = document.getElementById("input-confirm-password");
+const loginToRegister = function () {
 
     if (regButton.getAttribute("value") === "NewAccount") {
-        regButton.innerText = "To login";
-        regButton.setAttribute("value", "ToLogin");
-        logButton.innerText = "Register";
-        logButton.setAttribute("value", "register");
-        logButton.setAttribute("formaction", "/register");
-        confirmPasswordInput.removeAttribute("disabled");
-        slideIn(confirmPasswordDiv);
+        setRegisterAttributes();
+        verticalSlideIn(confirmPasswordDiv, DIV_HEIGHT);
     }
     else {
-        regButton.innerText = "New Account";
-        regButton.setAttribute("value", "NewAccount");
-        logButton.innerText = "Login";
-        logButton.setAttribute("value", "login");
-        logButton.setAttribute("formaction", "/login");
-        confirmPasswordInput.setAttribute("disabled", "");
-        slideOut(confirmPasswordDiv);
+        setLoginAttributes();
+        verticalSlideOut(confirmPasswordDiv, DIV_HEIGHT);
     }
 };
 
 
-var slideIn = function (elem: HTMLElement) {
+const setRegisterAttributes = () => {            
+    regButton.innerText = "To login";
+    regButton.setAttribute("value", "ToLogin");
+    logButton.innerText = "Register";
+    logButton.setAttribute("value", "register");
+    logButton.setAttribute("formaction", "/register");
+    confirmPasswordInput.removeAttribute("disabled");
+    pwInput.setAttribute("autocomplete", "new-password");
+}
+
+const setLoginAttributes = () => {
+    regButton.innerText = "New Account";
+    regButton.setAttribute("value", "NewAccount");
+    logButton.innerText = "Login";
+    logButton.setAttribute("value", "login");
+    logButton.setAttribute("formaction", "/login");
+    confirmPasswordInput.setAttribute("disabled", "");
+    pwInput.setAttribute("autocomplete", "current-password");
+}
+
+const verticalSlideIn = function (elem: HTMLElement, height: number) {
+    let id = null;
     clearInterval(id);
     id = setInterval(frame, 5);
     var store_number = 0;
+
     function frame() {
-        if (store_number === DIV_HEIGHT)
+        if (store_number === height)
             clearInterval(id);
         else {
             store_number += 1;
@@ -45,10 +57,12 @@ var slideIn = function (elem: HTMLElement) {
 };
 
 
-var slideOut = function (elem) {
+const verticalSlideOut = function (elem: HTMLElement, height: number) {
+    let id = null;
     clearInterval(id);
     id = setInterval(frame, 5);
-    var store_number = DIV_HEIGHT;
+    let store_number = height;
+
     function frame() {
         if (store_number === 0)
             clearInterval(id);

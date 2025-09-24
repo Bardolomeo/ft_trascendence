@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
-import { home, auth, test, postLogin } from "./routes.ts";
+import { home, login, register } from "./routes.ts";
 import path from 'path';
 import fastifyFormbody from '@fastify/formbody';
 
@@ -27,9 +27,8 @@ fastify.register(fastifyStatic, {
 
 //routes
 fastify.register(home);
-fastify.register(auth);
-fastify.register(test);
-fastify.register(postLogin);
+fastify.register(login);
+fastify.register(register);
 
 
 const start = async () => {

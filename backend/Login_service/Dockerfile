@@ -7,7 +7,10 @@ COPY package*.json ./
 RUN npm ci --only=production --no-cache
 
 COPY . .
+
+RUN npm ci @types/node --save-dev
+
 RUN npm run build
-EXPOSE 8080
+EXPOSE 3001
 
 CMD ["npm", "start"]

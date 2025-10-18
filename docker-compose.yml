@@ -1,12 +1,23 @@
 name: trasc
 
+volumes:
+  shared-db: # Shared volume between services
+  database_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./backend/Login_service/data
+
 services:
   frontend:
     build: ./frontend
     networks: 
       - firstnet
-    ports: 
-      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./nginx/certs:/certs
+    depends_on:
+      - nginx
 
   nginx:
     build: ./nginx
@@ -21,12 +32,42 @@ services:
       - firstnet
     env_file: "secrets/.env"
   
-  auth:
-    build: ./backend/auth
+  login-service:
+    build:
+      context: ./backend/Login_service
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/Login_service/data:/app/data
+      - shared-db:/shared # Shared volume for database access
+    env_file:
+      - ./secrets/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     networks:
       - firstnet
-    ports:
-      - "3001:3000"
+
+  # backup-service:
+  #   build:
+  #     context: ./backend/DB_Backup
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - shared-db:/shared # Access to login-service database
+  #     - ./backend/DB_Backup/backups:/app/backups # Persistent backup storage
+  #   environment:
+  #     - SOURCE_DB_PATH=/shared/database.db
+  #     - BACKUP_DIR=/app/backups
+  #     - MAX_BACKUPS=7
+  #     - CRON_SCHEDULE=0 2 * * * # Daily at 2 AM
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - login-service
+  #   networks:
+  #     - firstnet
 
 networks:
   firstnet:

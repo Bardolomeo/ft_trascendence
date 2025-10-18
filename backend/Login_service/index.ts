@@ -27,7 +27,7 @@ const startServer = async () => {
             };
         });
         
-        server.listen( {port: 8080, host: '0.0.0.0'}, (err, address) => {
+        server.listen( {port: 3000, host: 'login-service'}, (err, address) => {
             if (err) {
                 server.log.error(err);
                 console.error('Error starting server:', err);

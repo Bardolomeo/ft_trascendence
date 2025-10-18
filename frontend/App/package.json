@@ -10,10 +10,11 @@
     "fastify": "^5.5.0",
     "http": "^0.0.1-security",
     "tailwindcss": "^4.1.12",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "ts-node": "^10.9.2"
   },
   "scripts": {
-    "start": "tsc ./src/scripts/input-ts/*.ts --outDir ./src/scripts/output-js/ ; tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | nodemon ./src/index.ts"
+    "start": "tsc ./src/scripts/input-ts/*.ts --outDir ./src/scripts/output-js/ ; tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | nodemon ./src/index.ts --use-system-ca"
   },
   "author": "Bard Sapio",
   "license": "ISC",

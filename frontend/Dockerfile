@@ -4,13 +4,9 @@ RUN apt-get update && apt-get install -y wget gnupg g++ apt-utils curl git && ap
 
 RUN apt-get update && apt-get install -y npm && apt-get clean
 
-RUN npm i nodemon --global 
-
 COPY ./App /App
 
 WORKDIR /App
-
-#RUN npm ci @types/node typescript --save-dev
 
 RUN npm i
 

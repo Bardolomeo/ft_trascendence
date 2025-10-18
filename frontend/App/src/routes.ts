@@ -1,80 +1,84 @@
-import fs from 'fs';
-import Fastify from 'fastify';
-import fastifyFormbody from '@fastify/formbody';
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = null;
+import type { FastifyReply, FastifyRequest } from "fastify";
+import fs from "fs";
 
-
-const fastify = Fastify({logger:true}); 
-fastify.register(fastifyFormbody);
-
-
-interface Body {
-  username: String,
-  password: String
+interface TypedRequestBody<T> extends FastifyRequest {
+  body: T;
 }
 
-export async function home (fastify, options) {
-  fastify.get('/', async (request, reply) => 
-        {
-            const file = fs.readFileSync('./src/index.html', 'utf-8');
-            const response = new Response(file, {
-            status: 200,
-            headers: {'Content-Type': 'text/html'}
-            });
-            await reply.send(response);
-        })
+type RegisterFormBody = {
+  username: string,
+  password: string,
+  confirmPassword: string,
 }
 
 
-export async function getLogin (fastify, options) {
-  await fastify.get('/login', async (request, reply) => 
-        {
-            const file = fs.readFileSync('./src/login.html', 'utf-8');
-            const response = new Response(file, {
-            status: 200,
-            headers: {'Content-Type': 'text/html'}
-            });
-            await reply.send(response);
-
-          })
+export async function home(fastify: any, {}) {
+  fastify.get("/", async (req: FastifyRequest, reply: FastifyReply) => {
+    const file = fs.readFileSync("./src/index.html", "utf-8");
+    const response = new Response(file, {
+      status: 200,
+      headers: { "Content-Type": "text/html" },
+    });
+    await reply.send(response);
+  });
 }
 
-export async function postLogin (fastify, options) {
-    await fastify.post('/login', async (request, reply) => 
-    {
-      const response = await fetch("https://nginx/signin"
-              // method: "POST",
-              // headers: {
-              //   "Content-Type": "application/x-www-form-urlencoded",
-              //   "Accept": "application/json"
-              // },
-              // body: JSON.stringify(request.body),
-            );
-            if (!response.ok)
-            {
-              const message = response.text();
-              throw new Error(`Unexpected Error occurred: ${message}`);
-            } else {
-              await reply.send(response);
-            }
-    })
+export async function getLogin(fastify: any, {}) {
+  await fastify.get("/login", async (req: FastifyRequest, reply: FastifyReply) => {
+    const file = fs.readFileSync("./src/login.html", "utf-8");
+    const response = new Response(file, {
+      status: 200,
+      headers: { "Content-Type": "text/html" },
+    });
+    await reply.send(response);
+  });
 }
 
-export async function register (fastify, options) {
-  await fastify.post('/register', async (request: Request, reply) => 
-        {
-            const body = JSON.stringify(request.body);
-            const response = await fetch("http://auth:3000/signUp", {
-              method: "POST",
-              headers: {"Content-Type": "application/x-www-form-urlencoded"},
-              body: body
-            });
-            if (!response.ok)
-            {
-              const message = response.text();
-              throw new Error(`Unexpected Error occurred: ${message}`);
-            } else {
-              await reply.send(response);
-            }
-    }) 
+export async function postLogin(fastify: any, {}) {
+  await fastify.post(
+    "/login",
+    async (
+      request: TypedRequestBody<{ username: string; password: string }>,
+      reply: FastifyReply
+    ) => {
+      const body = request.body;
+      const { username, password } = body;
+      const response = await fetch("https://nginx/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+      if (!response.ok) {
+        const message = response.text();
+        throw new Error(
+          `Unexpected Error occurred: ${message} \n ${request.body}`
+        );
+      } else {
+        console.log("there");
+        await reply.send(response);
+      }
+    }
+  );
+}
+
+export async function register(fastify: any, {}) {
+  await fastify.post("/register", async (req: TypedRequestBody<RegisterFormBody>, reply: FastifyReply) => {
+    const body = JSON.stringify(req.body);
+    const response = await fetch("http://auth:3000/signUp", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body,
+    });
+    if (!response.ok) {
+      const message = response.text();
+      throw new Error(`Unexpected Error occurred: ${message}`);
+    } else {
+      await reply.send(response);
+    }
+  });
 }

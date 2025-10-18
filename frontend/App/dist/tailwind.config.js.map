@@ -1,0 +1,1 @@
+{"version":3,"file":"tailwind.config.js","sourceRoot":"","sources":["../src/tailwind.config.ts"],"names":[],"mappings":"AAAA,2CAA2C;AAC3C,MAAM,CAAC,OAAO,GAAG;IACf,KAAK,EAAE;QACL,OAAO,EAAE;YACP,aAAa,EAAE,QAAQ;YAEvB,IAAI,EAAE,OAAO;YACb,uCAAuC;YAEvC,IAAI,EAAE,OAAO;YACb,uCAAuC;YAEvC,IAAI,EAAE,QAAQ;YACd,wCAAwC;SACzC;KACF;CACF,CAAA"}

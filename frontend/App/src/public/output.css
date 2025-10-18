@@ -252,13 +252,9 @@
   .overflow-hidden {
     overflow: hidden;
   }
-  .border {
+  .border-3 {
     border-style: var(--tw-border-style);
-    border-width: 1px;
-  }
-  .border-4 {
-    border-style: var(--tw-border-style);
-    border-width: 4px;
+    border-width: 3px;
   }
   .border-\[1px\] {
     border-style: var(--tw-border-style);
@@ -267,9 +263,6 @@
   .border-solid {
     --tw-border-style: solid;
     border-style: solid;
-  }
-  .border-\[\#aa3700\] {
-    border-color: #aa3700;
   }
   .border-\[\#ffc073\] {
     border-color: #ffc073;

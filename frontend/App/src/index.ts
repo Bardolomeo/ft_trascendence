@@ -5,6 +5,7 @@ import path from 'path';
 import fastifyFormbody from '@fastify/formbody';
 
 
+console.log("hello");
 
 const fastify = Fastify({
     logger: true
@@ -30,11 +31,13 @@ fastify.register(home);
 fastify.register(getLogin);
 fastify.register(postLogin);
 fastify.register(register);
-
+fastify.register(test);
+fasti
 
 const start = async () => {
     try {
-        await fastify.listen({port: 3000, host:"frontend"})
+        await fastify.listen({port: 3000, host:"0.0.0.0"})
+        // await fastify.listen({port: 3000, host:"frontend"})
     } catch (err) {
         fastify.log.error(err);
     }

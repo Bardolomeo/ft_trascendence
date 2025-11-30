@@ -5,21 +5,24 @@
   "dependencies": {
     "@fastify/formbody": "^8.0.2",
     "@fastify/static": "^8.2.0",
-    "@tailwindcss/cli": "^4.1.12",
-    "@tailwindcss/postcss": "^4.1.12",
+    "@tailwindcss/cli": "^4.1.14",
     "fastify": "^5.5.0",
     "http": "^0.0.1-security",
-    "tailwindcss": "^4.1.12",
-    "typescript": "^5.9.2",
     "ts-node": "^10.9.2"
   },
   "scripts": {
-    "start": "tsc ./src/scripts/input-ts/*.ts --outDir ./src/scripts/output-js/ ; tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | nodemon ./src/index.ts --use-system-ca"
+    "build": "tsc -p tsconfig.json",
+    "dev": "npx @tailwindcss/cli -i ./src/public/style/main.css -o ./src/public/style/output.css --watch -c ./tailwind.config.ts | tsc --watch --esModuleInterop --outDir ./dist/ ./src/index.ts | nodemon ./src/index.ts --use-system-ca",
+    "start": "nodemon ./dist/index.js --use-system-ca"
   },
   "author": "Bard Sapio",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
     "ts-node": "^10.9.2"
+    "@types/node": "^24.8.1",
+    "tailwindcss": "^4.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

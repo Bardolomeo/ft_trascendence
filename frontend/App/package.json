@@ -8,20 +8,18 @@
     "@tailwindcss/cli": "^4.1.14",
     "fastify": "^5.5.0",
     "http": "^0.0.1-security",
+    "tailwindcss": "^4.1.12",
     "ts-node": "^10.9.2"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "npx @tailwindcss/cli -i ./src/public/style/main.css -o ./src/public/style/output.css --watch -c ./tailwind.config.ts | tsc --watch --esModuleInterop --outDir ./dist/ ./src/index.ts | nodemon ./src/index.ts --use-system-ca",
-    "start": "nodemon ./dist/index.js --use-system-ca"
+    "start": "tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | ts-node ./src/index.ts --use-system-ca"
   },
   "author": "Bard Sapio",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "ts-node": "^10.9.2"
     "@types/node": "^24.8.1",
-    "tailwindcss": "^4.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

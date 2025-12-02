@@ -13,7 +13,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | ts-node ./src/index.ts --use-system-ca"
+    "start": "tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | ts-node ./src/index.ts --use-system-ca",
+    "startd": "tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | ts-node ./src/index_docker.ts --use-system-ca"
   },
   "author": "Bard Sapio",
   "license": "ISC",

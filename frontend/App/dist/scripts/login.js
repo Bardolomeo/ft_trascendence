@@ -88,5 +88,4 @@ const showConfirmPassword = () => {
     else
         cpwInput.setAttribute("type", "text");
 };
-export {};
 //# sourceMappingURL=login.js.map

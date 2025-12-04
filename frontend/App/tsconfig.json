@@ -1,13 +1,16 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
-  "compilerOptions": {
+  
+	
+
+	"compilerOptions": {
     // File Layout
     "rootDir": "./src",
     "outDir": "./dist",
-
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
+    "module": "preserve",
+		"moduleResolution": "bundler",
     "target": "esnext",
     "types": ["node"],
     // For nodejs:
@@ -33,11 +36,18 @@
     // "noPropertyAccessFromIndexSignature": true,
 
     // Recommended Options
+		"allowImportingTsExtensions": true,
     "strict": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+
+	"include": ["src/**/*"],
+	"exclude": [
+        "./dist/**/*", // This is what fixed it!
+				"./node_modules",
+    ]
 }

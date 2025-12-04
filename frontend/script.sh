@@ -9,4 +9,4 @@ export NODE_EXTRA_CA_CERTS=/certs/ultrapong.crt
 
 echo "\nIF SOMETHING DOES NOT WORK REMEMBER TO BUILD FIRST\n"
 
-npm startd;
+npm run startd;

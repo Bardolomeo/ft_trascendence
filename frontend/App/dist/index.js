@@ -2,7 +2,8 @@ import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 import path from 'path';
 import fastifyFormbody from '@fastify/formbody';
-import { getLogin, home, postLogin, register } from '../dist/routes.js';
+import { getLogin, home, postLogin, register } from './routes';
+console.log("hello");
 export const fastify = Fastify({
     logger: true
 });
@@ -24,7 +25,8 @@ fastify.register(postLogin);
 fastify.register(register);
 const start = async () => {
     try {
-        await fastify.listen({ port: 3000, host: "frontend" });
+        await fastify.listen({ port: 3000, host: "0.0.0.0" });
+        //await fastify.listen({port: 3000, host:"frontend"})
     }
     catch (err) {
         fastify.log.error(err);

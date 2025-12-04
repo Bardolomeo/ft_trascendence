@@ -183,12 +183,6 @@
   .left-0 {
     left: calc(var(--spacing) * 0);
   }
-  .-z-10 {
-    z-index: calc(10 * -1);
-  }
-  .z-10 {
-    z-index: 10;
-  }
   .col-span-1 {
     grid-column: span 1 / span 1;
   }
@@ -204,12 +198,6 @@
   .h-80 {
     height: calc(var(--spacing) * 80);
   }
-  .h-\[50vh\] {
-    height: 50vh;
-  }
-  .h-\[70vh\] {
-    height: 70vh;
-  }
   .h-\[100vh\] {
     height: 100vh;
   }
@@ -218,9 +206,6 @@
   }
   .h-full {
     height: 100%;
-  }
-  .h-screen {
-    height: 100vh;
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
@@ -231,17 +216,11 @@
   .w-\[65\%\] {
     width: 65%;
   }
-  .w-\[100\%\] {
-    width: 100%;
-  }
   .w-\[100vw\] {
     width: 100vw;
   }
   .w-full {
     width: 100%;
-  }
-  .w-screen {
-    width: 100vw;
   }
   .min-w-1\/2 {
     min-width: calc(1/2 * 100%);
@@ -258,12 +237,6 @@
     --tw-scale-z: 125%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
   }
-  .scale-150 {
-    --tw-scale-x: 150%;
-    --tw-scale-y: 150%;
-    --tw-scale-z: 150%;
-    scale: var(--tw-scale-x) var(--tw-scale-y);
-  }
   .grid-cols-7 {
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
@@ -278,9 +251,6 @@
   }
   .justify-center {
     justify-content: center;
-  }
-  .justify-end {
-    justify-content: flex-end;
   }
   .gap-10 {
     gap: calc(var(--spacing) * 10);
@@ -335,12 +305,6 @@
   }
   .text-\[\#ffc073\] {
     color: #ffc073;
-  }
-  .opacity-65 {
-    opacity: 65%;
-  }
-  .opacity-85 {
-    opacity: 85%;
   }
   .shadow {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
@@ -423,21 +387,6 @@
     @media (width >= 64rem) {
       font-size: var(--text-base);
       line-height: var(--tw-leading, var(--text-base--line-height));
-    }
-  }
-  .xl\:-bottom-24 {
-    @media (width >= 80rem) {
-      bottom: calc(var(--spacing) * -24);
-    }
-  }
-  .xl\:h-\[40vh\] {
-    @media (width >= 80rem) {
-      height: 40vh;
-    }
-  }
-  .xl\:h-auto {
-    @media (width >= 80rem) {
-      height: auto;
     }
   }
 }

@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 import path from 'path';
 import fastifyFormbody from '@fastify/formbody';
-import { getLogin, home, postLogin, register } from '../dist/routes.js';
+import { getLogin, home, postLogin, register } from './routing.ts';
 
 
 console.log("hello");

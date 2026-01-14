@@ -1,4 +1,3 @@
-import fs from 'fs';
 
 
 const injectHtml = (content: string) =>  {
@@ -9,16 +8,17 @@ if (!placeholder)
 	console.error("Element not found: GradientBackground");
 else
 	placeholder.innerHTML = content;
+	console.log(placeholder?.children);
 
 }
 
-fs.readFile('./GradientBackground.html', (err, data) => {
+const handleLoad = async () => {
+	const data =  await fetch("/components-html/home/GradientBackground.html");			
+	const body = await data.text()
 		
-	if (err)
-		throw (err);
-	
-	const content = data;
-	injectHtml(content.toString());
-});
+	injectHtml(body);
+}
+
+window.onload = handleLoad
 
 

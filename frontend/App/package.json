@@ -7,14 +7,16 @@
     "@fastify/static": "^8.2.0",
     "@tailwindcss/cli": "^4.1.14",
     "fastify": "^5.5.0",
+    "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
     "tailwindcss": "^4.1.12",
     "ts-node": "^10.9.2"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "start": "tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | ts-node ./src/index.ts --use-system-ca",
-    "startd": "tailwindcss --watch ./src/public/main.css --output ./src/public/output.css | ts-node ./src/index_docker.ts --use-system-ca"
+    "build": "rm src/**/*.js -rf && tsc ",
+
+    "start": "npm run build && npx @tailwindcss/cli --watch -i ./src/public/style/main.css -o ./src/public/style/output.css | npx ts-node ./src/index.ts --use-system-ca",
+    "dev": "npm run build && npx @tailwindcss/cli --watch -i ./src/public/style/main.css -o ./src/public/style/output.css | npx ts-node ./src/index.ts --use-system-ca"
   },
   "author": "Bard Sapio",
   "license": "ISC",

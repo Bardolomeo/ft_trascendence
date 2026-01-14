@@ -4,14 +4,14 @@ RUN apt-get update && apt-get install -y wget gnupg g++ apt-utils curl git && ap
 
 RUN apt-get update && apt-get install -y npm && apt-get clean
 
-COPY ./App /App
+#COPY ./App /App
 
-WORKDIR /App
 
-RUN npm i
+#RUN npm i
 
 COPY script.sh /
 
 RUN chmod +x /script.sh
 
 CMD ["/script.sh"]
+#ENTRYPOINT ["sh"]

@@ -3,10 +3,12 @@
   <head id="head">
     <meta charset="utf-8" />
     <title>Login</title>
-    <link href="./public/style/output.css" rel="stylesheet">
+		 <link href="./public/style/output.css" rel="stylesheet">
   </head>
   <body class="flex flex-col gap-48 lg:gap-16 justify-center w-[100vw] h-[100vh] items-center bg-linear-to-t from-zr-darker-green to-zr-dark-orange" id="login-body">
-      <img src="./public/images/title.png" class=" lg:scale-75 relative b-16 sm:static">
+			<!--- SCRIPT REQUIRES GLOBAL DEFINITIO IN JS FILE TO MAKE FUNCTIONS CALLABLE--->
+      <script type="module" src="/scripts/login.js"></script>
+      <img src="public/images/title.png" class=" lg:scale-75 relative b-16 sm:static">
       <div class="w-[65%] lg:w-1/2 border-solid h-80 lg:h-1/2 border-3 s,:border-double bg-zr-darker-green border-zr-cream shadow-xl flex justify-center items-center scale-125 lg:scale-100"  id="login-container">
         <form method="POST" class="flex flex-col min-w-1/2 gap-10" id="login-form" >
             <div class="">
@@ -51,6 +53,5 @@
             </div>
         </form>
       </div>
-      <script type="text/javascript" src="../dist/scripts/login.js"></script>
   </body>
 </html>

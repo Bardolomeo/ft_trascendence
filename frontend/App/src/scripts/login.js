@@ -1,12 +1,11 @@
-const DIV_HEIGHT = 65;
-const logButton = document.getElementById("login-login");
-const regButton = document.getElementById("login-new-account");
-const confirmPasswordDiv = document.getElementById("confirmPasswordDiv");
-const confirmPasswordInput = document.getElementById("input-confirm-password");
-const pwInput = document.getElementById("input-password");
-export const loginToRegister = function () {
-    if (!confirmPasswordDiv)
-        return;
+var DIV_HEIGHT = 65;
+var logButton = document.getElementById("login-login");
+var regButton = document.getElementById("login-new-account");
+var confirmPasswordDiv = document.getElementById("confirmPasswordDiv");
+var confirmPasswordInput = document.getElementById("input-confirm-password");
+var pwInput = document.getElementById("input-password");
+var loginToRegister = function () {
+    var confirmPasswordDiv = document.getElementById("confirmPasswordDiv");
     if ((regButton === null || regButton === void 0 ? void 0 : regButton.getAttribute("value")) === "NewAccount") {
         setRegisterAttributes();
         verticalSlideIn(confirmPasswordDiv, DIV_HEIGHT);
@@ -16,11 +15,10 @@ export const loginToRegister = function () {
         verticalSlideOut(confirmPasswordDiv, DIV_HEIGHT);
     }
 };
-const setRegisterAttributes = () => {
-    if (!regButton || !logButton || !confirmPasswordInput || !pwInput) {
-        console.log("failed to retrieve Elements");
+var setRegisterAttributes = function () {
+    //Check if getElement(s) went bad
+    if (!checkElements([regButton, logButton, confirmPasswordInput, pwInput]))
         return;
-    }
     regButton.innerText = "To login";
     regButton.setAttribute("value", "ToLogin");
     logButton.innerText = "Register";
@@ -29,11 +27,9 @@ const setRegisterAttributes = () => {
     confirmPasswordInput.removeAttribute("disabled");
     pwInput.setAttribute("autocomplete", "new-password");
 };
-const setLoginAttributes = () => {
-    if (!regButton || !logButton || !confirmPasswordInput || !pwInput) {
-        console.log("failed to retrieve Elements");
+var setLoginAttributes = function () {
+    if (!checkElements([regButton, logButton, confirmPasswordInput, pwInput]))
         return;
-    }
     regButton.innerText = "New Account";
     regButton.setAttribute("value", "NewAccount");
     logButton.innerText = "Login";
@@ -42,8 +38,8 @@ const setLoginAttributes = () => {
     confirmPasswordInput.setAttribute("disabled", "");
     pwInput.setAttribute("autocomplete", "current-password");
 };
-const verticalSlideIn = function (elem, height) {
-    let id = setInterval(() => { });
+var verticalSlideIn = function (elem, height) {
+    var id = setInterval(function () { });
     clearInterval(id);
     id = setInterval(frame, 5);
     var store_number = 0;
@@ -56,11 +52,11 @@ const verticalSlideIn = function (elem, height) {
         }
     }
 };
-const verticalSlideOut = function (elem, height) {
-    let id = setInterval(() => { });
+var verticalSlideOut = function (elem, height) {
+    var id = setInterval(function () { });
     clearInterval(id);
     id = setInterval(frame, 5);
-    let store_number = height;
+    var store_number = height;
     function frame() {
         if (store_number === 0)
             clearInterval(id);
@@ -70,22 +66,31 @@ const verticalSlideOut = function (elem, height) {
         }
     }
 };
-const showPassword = () => {
-    const pwInput = document.getElementById("input-password");
-    if (!pwInput)
-        return (console.log("failed to retrieve element"));
+var showPassword = function () {
+    var pwInput = document.getElementById("input-password");
+    if (!checkElements([pwInput]))
+        return;
     if (pwInput.getAttribute("type") === "text")
         pwInput.setAttribute("type", "password");
     else
         pwInput.setAttribute("type", "text");
 };
-const showConfirmPassword = () => {
-    const cpwInput = document.getElementById("input-confirm-password");
-    if (!cpwInput)
-        return (console.log("failed to retrieve element"));
+var showConfirmPassword = function () {
+    var cpwInput = document.getElementById("input-confirm-password");
+    if (!checkElements([pwInput]))
+        return;
     if (cpwInput.getAttribute("type") === "text")
         cpwInput.setAttribute("type", "password");
     else
         cpwInput.setAttribute("type", "text");
 };
-//# sourceMappingURL=login.js.map
+// Pass elements to check if they were getted;
+function checkElements(neededElements) {
+    neededElements.forEach(function (el, idx) {
+        if (!el) {
+            console.error("failed to retrieve Element: ".concat(idx));
+            return false;
+        }
+    });
+    return true;
+}

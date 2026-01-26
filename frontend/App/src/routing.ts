@@ -1,5 +1,4 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import fs from "fs";
 
 interface TypedRequestBody<T> extends FastifyRequest {
   body: T;
@@ -11,28 +10,6 @@ type RegisterFormBody = {
   confirmPassword: string,
 }
 
-
-export async function home(fastify: any, {}) {
-  fastify.get("/", async (req: FastifyRequest, reply: FastifyReply) => {
-    const file = fs.readFileSync("./src/index.html", "utf-8");
-    const response = new Response(file, {
-      status: 200,
-      headers: { "Content-Type": "text/html" },
-    });
-    await reply.send(response);
-  });
-}
-
-export async function getLogin(fastify: any, {}) {
-  await fastify.get("/login", async (req: FastifyRequest, reply: FastifyReply) => {
-    const file = fs.readFileSync("./src/login.html", "utf-8");
-    const response = new Response(file, {
-      status: 200,
-      headers: { "Content-Type": "text/html" },
-    });
-    await reply.send(response);
-  });
-}
 
 export async function postLogin(fastify: any, {}) {
   await fastify.post(
@@ -59,7 +36,6 @@ export async function postLogin(fastify: any, {}) {
           `Unexpected Error occurred: ${message} \n ${request.body}`
         );
       } else {
-        console.log("there");
         await reply.send(response);
       }
     }

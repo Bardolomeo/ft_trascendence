@@ -1,18 +1,17 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import fs from "fs";
-import findPage, { handleLoad } from "../components/orchestrator.ts";
+import findPage  from "../components/orchestrator.ts";
 
 
 //remember that defined route have precedence over wildcard
 export async function routesAllGet(fastify: FastifyInstance, {}) {
 fastify.get("/*", async (req: FastifyRequest, reply: FastifyReply) => {
 		const route = req.url;
-    const response = new Response(findPage(route), {
+    const response = new Response(await findPage(route), {
       status: 200,
       headers: { "Content-Type": "text/html" },
     });
     await reply.send(response);
-		await handleLoad(route);
   });
 }
 

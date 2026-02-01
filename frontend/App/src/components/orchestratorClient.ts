@@ -12,7 +12,7 @@ const checkDuplicateComponentsFiles = (dir: string[], id: string) => {
 	return false;
 }
 
-export const  getComponentsWithId = async (allPageElements: HTMLCollection) => {
+const  getComponentsWithId = async (allPageElements: HTMLCollection) => {
 	
 		let componentsInPage: HTMLElement [] = [];
 		for (let i = 0; i < allPageElements.length; i++)
@@ -29,9 +29,9 @@ export const  getComponentsWithId = async (allPageElements: HTMLCollection) => {
 }
 
 
-const getComponentsInPage = async () =>
+const getComponentsInPage = async (doc: Document) =>
 {
-		const allPageElements = document.getElementsByTagName("*");
+		const allPageElements = doc.getElementsByTagName("*");
 		if (!allPageElements)
 			throw new Error("Failed to fetch elements");
 		return allPageElements;
@@ -45,10 +45,10 @@ const getComponentsDirectoryListing = async () => {
 
 
 
-const appendChildren = async (idComp: HTMLElement[], dir: string[]) => {
+const appendChildren = async (idComponent: HTMLElement[], dir: string[]) => {
 
 		//LOOP fetch components files and append to them to their parents
-			idComp.forEach(async (parentComp) => {
+			idComponent.forEach(async (parentComp) => {
 
 			const id = parentComp.id 
 
@@ -83,44 +83,42 @@ const appendChildren = async (idComp: HTMLElement[], dir: string[]) => {
 	})
 }
 
-function nodeScriptClone(node: HTMLElement){
-        let script  = document.createElement("script");
-        script.text = node.innerHTML;
+//function nodeScriptClone(node: HTMLElement){
+//        let script  = document.createElement("script");
+//        script.text = node.innerHTML;
+//
+//        let i = -1, attrs = node.attributes, attr;
+//        while ( ++i < attrs.length ) {                                    
+//              script.setAttribute( (attr = attrs[i]).name, attr.value );
+//        }
+//        return script;
+//}
 
-        let i = -1, attrs = node.attributes, attr;
-        while ( ++i < attrs.length ) {                                    
-              script.setAttribute( (attr = attrs[i]).name, attr.value );
-        }
-        return script;
-}
+//const reloadScripts = () => {
+//	let scripts: HTMLCollection = document.getElementsByTagName("script");
+//	for (let i = 0; i < scripts.length; i++)
+//	{
+//		const node = (scripts.item(i) as HTMLScriptElement); 
+//		if (node.type !== "module")
+//		{
+//			node.parentNode?.replaceChild(nodeScriptClone(node), node);	
+//		}
+//	}
+//}
 
-const reloadScripts = () => {
-	let scripts: HTMLCollection = document.getElementsByTagName("script");
-	for (let i = 0; i < scripts.length; i++)
-	{
-		const node = (scripts.item(i) as HTMLScriptElement); 
-		if (node.type !== "module")
-		{
-			node.parentNode?.replaceChild(nodeScriptClone(node), node);	
-		}
-	}
-}
+export async function composePage(doc: Document) {
 
-async function composePage() {
-
-	let idComp: HTMLElement[];
+	let idComponent: HTMLElement[];
 	let cyc = 0;
 
 	//Reiterate until there are 0 id fields in Uppercase
 	do {
-		const allPageElements = await getComponentsInPage();
-		idComp = await getComponentsWithId(allPageElements);
+		const allPageElements = await getComponentsInPage(doc);
+		idComponent = await getComponentsWithId(allPageElements);
 		const dir: string[] = await getComponentsDirectoryListing();
-		appendChildren(idComp.reverse(), dir);
+		appendChildren(idComponent.reverse(), dir );
 		cyc++;
-	} while ((idComp.length - parsedComponents.length) > 0 );
+	} while ((idComponent.length - parsedComponents.length) > 0 );
 
-	reloadScripts();
 }
 
-composePage();

@@ -1,9 +1,7 @@
 
-import { FILE } from "dns/promises";
 import fs from "fs";
+import { addDoneFlag, checkIfComponentDone, deleteDoneFlags, findComponentTagEnd, getClass, getComponentFileContent, getComponentName } from "./.orchestrator/utils.ts";
 
-const NEEDLE = "class="
-const FILE_CACHE = new Map<string, string>();
 let ALL_DONE = false;
 
 type PageCompositingType = {
@@ -50,155 +48,26 @@ export default function findPage(route: string) {
 }
 
 
-//Find the first istance of 'class=' in a given string (index === start of needle)
-function getClassIndex(unparsed: string) {
-
-		const classIndex = unparsed.search(NEEDLE);
-		return classIndex;
-}
-
-function getClass(unparsed: string) {
-
-		const classIndex = getClassIndex(unparsed);
-		if (classIndex < 0)
-			return null;
-		const classStringStart = unparsed.substring(classIndex + NEEDLE.length + 1);
-		const classString = classStringStart.substring(0, classStringStart.search('"'));
-
-		return classString;
-}
-
-function getComponentName(cn: string) {
-
-	let ret: string = "";
-
-	for (let i = 0; i < cn.length; i++)
-	{
-		if (cn[i] >= 'A' && cn[i] <= 'Z')
-		{
-			if (ret !== "" && (cn[i - 1] === ' ' ||  cn[i - 1] === '"'))
-			{
-				console.error(`\nMore than one component in class: ${ret}\n`);
-				return ret;
-			}
-			let j = i;
-			for (j; (cn[j] !== '"' && cn[j] !== ' ' && j < cn.length); j++);
-			const componStart = i;
-			i += j;
-			const componEnd = j;
-			ret = cn.substring(componStart, componEnd);
-		}
-	}
-
-	return ret;
-};
-
-function findComponentTagEnd(unparsed: string) {
-
-	const classIndex  = getClassIndex(unparsed);
-	let i = classIndex;
-	let isText: boolean = false;
-
-	if (!classIndex)
-		return 0;
-	for (i; i < unparsed.length; i++)
-	{
-		if (unparsed[i] === '"')
-			isText = !isText;
-		if (isText)
-			continue;
-		if (unparsed[i] === '>')
-			break;
-	}
-	
-	return (i);
-
-}
-
-const getComponentsDirectoryListing = () => {
-
-	//TODO edit to accept generic path
-	const res = fs.readdirSync("./src/components", {recursive: true, encoding: "utf8"});
-	return res;
-}
-
-
-const checkDuplicateComponentsFiles = (dir: string[], id: string) => {
-	
-	const firstInstance = dir.filter((path) => (path.search(id + ".html") > 0))
-
-	if (firstInstance.length > 1 )
-	{
-		console.error(`\nError: duplicate component file: ${id}\n`);
-		return true;
-	}
-	return false;
-}
-
-
-function getComponentFile(compName: string) {
-	
-			const dir: string[] = getComponentsDirectoryListing();
-			if (!dir)
-				return null;
-
-			//path to component file
-			const relativePath = dir.find((el) => (el.search(compName) > 0))
-			if (!relativePath)
-			{
-				console.error(`\nElement not found: ${compName}\n`);
-				return "";
-			}
-			checkDuplicateComponentsFiles(dir, compName);
-
-			//Fetch content from cache
-			let fileContent = FILE_CACHE.get(compName);
-			
-			//fetch from server and add to cache if not cached
-			if (!fileContent) {
-				//TODO edit for generic path
-				fileContent = fs.readFileSync("./src/components/" + relativePath, {encoding: "utf8"});
-				if (!fileContent)
-					return "";
-				FILE_CACHE.set(compName, fileContent);
-			}
-
-			return fileContent;
-}
-
-function addDoneFlag(unparsed: string) {
-	const classIndex = getClassIndex(unparsed) + NEEDLE.length + 1;
-
-	const str1 = unparsed.substring(0, classIndex);
-	const str2 = unparsed.substring(classIndex);
-	return str1 + " ____done____ " + str2;
-}
-
-function checkIfComponentDone(unparsed: string) {
-	const cn = getClass(unparsed);
-	if (cn!.search("____done____") > 0)
-	{
-		return true;
-	}
-
-	ALL_DONE = false;
-	return false;
-}
-
 function writeComponent(pageString: string, compName: string, nullRes: PageCompositingType) {
 
 
 			// Flag to not append children to the same component in successive iterations
 			const isDone = checkIfComponentDone(pageString);
 			if (!isDone) 
+			{
 				pageString = addDoneFlag(pageString);
+				ALL_DONE = false;
+			}
 
 			// split the page where the closing angle bracket of the first component is found;
 			let splitIndex = findComponentTagEnd(pageString);
 			if (!splitIndex)
 				return nullRes;	
 
+			//Ends with found component closing bracket
 			const firstHalf = pageString.substring(0, splitIndex + 1);
+
+			//Starts after found component closing bracket
 			const secondHalf = pageString.substring(splitIndex + 1);
 
 
@@ -207,18 +76,18 @@ function writeComponent(pageString: string, compName: string, nullRes: PageCompo
 				return {parsedPage: firstHalf, unparsedPage: secondHalf};
 			}
 
-			const compFile = getComponentFile(compName);
+			const compFile = getComponentFileContent(compName);
 			if (!compFile)
 			{
 				console.error(`\nError in component file fetch: ${compName}\n`);
 			}
 
+			//Fragment with the updated component in 'newPageFragment'
 			const newPageFragment = firstHalf + compFile;
 			return {parsedPage: newPageFragment, unparsedPage: secondHalf};
 }
 
 
-//
 function appendComponent(pageString: string): PageCompositingType | null {
 	
 
@@ -226,18 +95,20 @@ function appendComponent(pageString: string): PageCompositingType | null {
 		const nullRes: PageCompositingType = {parsedPage: pageString, unparsedPage:""};
 
 
+		//returns the value of the first class attribute found in pageString
 		const firstClassFound = getClass(pageString);
 		if (!firstClassFound) {
 			return nullRes;
 		}
 
-
+		//Getter for name given in element class
 		const compName = getComponentName(firstClassFound);
 		return (writeComponent(pageString, compName, nullRes));
 		
 }
 
 
+//parse index file and appends children accordingly
 function  composePageIteration(body: string) {
 	
    	let oldPage = body;
@@ -254,18 +125,6 @@ function  composePageIteration(body: string) {
 
 }
 
-
-function deleteDoneFlags(page: string) {
-
-	const splitted = page.split('____done____')
-	let ret = "";
-
-	splitted.forEach((line) => {
-		ret += line.substring(1, line.length - 1);
-	})
-
-	return ret;
-}
 
 function composePage(body: string) {
 

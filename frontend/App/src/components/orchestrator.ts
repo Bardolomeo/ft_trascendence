@@ -1,6 +1,7 @@
 
 import fs from "fs";
-import { addDoneFlag, checkIfComponentDone, deleteDoneFlags, findComponentTagEnd, getClass, getComponentFileContent, getComponentName } from "./.orchestrator/utils.ts";
+import { addDoneFlag, checkIfComponentDone, deleteDoneFlags, findComponentTagEnd, getClass, getComponentFileContent, getComponentName } from "./orchestrator/utils.ts";
+import { setProps } from "./orchestrator/props.ts";
 
 let ALL_DONE = false;
 
@@ -8,6 +9,9 @@ type PageCompositingType = {
 	parsedPage: string;
 	unparsedPage: string;	
 }
+
+
+const NULL_RES: PageCompositingType = {parsedPage: "", unparsedPage:""};
 
 //fetfh index.html file for the route if file /components/{route}/index.html exists
 //where /components/ is the static route for /src/components
@@ -48,10 +52,12 @@ export default function findPage(route: string) {
 }
 
 
-function writeComponent(pageString: string, compName: string, nullRes: PageCompositingType) {
+function writeComponent(pageString: string, compName: string) {
 
 
 			// Flag to not append children to the same component in successive iterations
+			
+			NULL_RES.parsedPage = pageString;
 			const isDone = checkIfComponentDone(pageString);
 			if (!isDone) 
 			{
@@ -59,10 +65,11 @@ function writeComponent(pageString: string, compName: string, nullRes: PageCompo
 				ALL_DONE = false;
 			}
 
+
 			// split the page where the closing angle bracket of the first component is found;
 			let splitIndex = findComponentTagEnd(pageString);
 			if (!splitIndex)
-				return nullRes;	
+				return NULL_RES;	
 
 			//Ends with found component closing bracket
 			const firstHalf = pageString.substring(0, splitIndex + 1);
@@ -88,22 +95,28 @@ function writeComponent(pageString: string, compName: string, nullRes: PageCompo
 }
 
 
-function appendComponent(pageString: string): PageCompositingType | null {
-	
 
-		//used for non-blocking errors
-		const nullRes: PageCompositingType = {parsedPage: pageString, unparsedPage:""};
+function appendComponent(pageString: string): PageCompositingType | null {
+
+		const propsMap = new Map<string, string>();
 
 
 		//returns the value of the first class attribute found in pageString
+		NULL_RES.parsedPage = pageString;
 		const firstClassFound = getClass(pageString);
+		//console.log(firstClassFound);
 		if (!firstClassFound) {
-			return nullRes;
+			return NULL_RES;
 		}
 
-		//Getter for name given in element class
-		const compName = getComponentName(firstClassFound);
-		return (writeComponent(pageString, compName, nullRes));
+		//Getter for component name, search inside class attribute 
+		//return "" if does not find component name in class
+		const compName = getComponentName(firstClassFound);	
+		//if (compName) {
+			//handle prop declaration
+			setProps(propsMap, compName, pageString);
+		//}
+		return (writeComponent(pageString, compName));
 		
 }
 

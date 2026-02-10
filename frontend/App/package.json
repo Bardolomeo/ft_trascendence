@@ -15,7 +15,7 @@
   "scripts": {
     "watch-build-scripts": "tsc --watch | tsc -p ./tsconfig_orche.json --watch",
     "start": "tsc && npx @tailwindcss/cli -i ./src/public/style/main.css -o ./src/public/style/output.css | npx ts-node ./src/index.ts --use-system-ca",
-    "dev": "npx @tailwindcss/cli --watch -i ./src/public/style/main.css -o ./src/public/style/output.css | npx nodemon ./src/index.ts --use-system-ca -e ts,js,html"
+    "dev": "npx @tailwindcss/cli --watch -i ./src/public/style/main.css -o ./src/public/style/output.css | npx nodemon ./src/index.ts --use-system-ca -e ts,js,html "
   },
   "author": "Bard Sapio",
   "license": "ISC",

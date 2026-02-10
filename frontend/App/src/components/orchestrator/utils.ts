@@ -3,10 +3,32 @@ import fs from "fs";
 const NEEDLE = "class="
 const FILE_CACHE = new Map<string, string>();
 
-export function getClassIndex(unparsed: string) {
+function foundUppercaseLetter(cls: string) {
+	for (let i = NEEDLE.length + 2; cls[i] !== '"' && i < cls.length; i++)
+	{
+		if (cls[i] >= 'A' && cls[i] <= 'Z' && i >= 0)
+			return true;	
+	}
+	return false;
+}
 
-		const classIndex = unparsed.search(NEEDLE);
-		return classIndex;
+/** return the first class that contains a component, starting at ' " ' character right after 'class=' */
+	export function getClassIndex(unparsed: string) {
+
+		let str = unparsed;
+		let totalIdx = 0;
+		do {
+			let classIndex = str.search(NEEDLE);
+			if (classIndex < 0)
+			{
+				return -1;
+			}
+			classIndex += NEEDLE.length;
+			totalIdx += classIndex;
+			str = str.substring(classIndex);
+		} while (!foundUppercaseLetter(str))
+
+		return totalIdx;
 }
 
 export function getClass(unparsed: string) {
@@ -14,7 +36,10 @@ export function getClass(unparsed: string) {
 		const classIndex = getClassIndex(unparsed);
 		if (classIndex < 0)
 			return null;
-		const classStringStart = unparsed.substring(classIndex + NEEDLE.length + 1);
+
+		//classIndex + 1 to skip first quotes in class
+		const classStringStart = unparsed.substring(classIndex + 1);
+		console.log("\n\n" + classStringStart + "\n\n");
 		const classString = classStringStart.substring(0, classStringStart.search('"'));
 
 		return classString;
@@ -45,6 +70,7 @@ export function getComponentName(cn: string) {
 	return ret;
 };
 
+
 export function findComponentTagEnd(unparsed: string) {
 
 	const classIndex  = getClassIndex(unparsed);
@@ -66,6 +92,7 @@ export function findComponentTagEnd(unparsed: string) {
 	return (i);
 
 }
+
 export const getComponentsDirectoryListing = () => {
 
 	//TODO edit to accept generic path
@@ -116,7 +143,7 @@ export function getComponentFileContent(compName: string) {
 }
 
 export function addDoneFlag(unparsed: string) {
-	const classIndex = getClassIndex(unparsed) + NEEDLE.length + 1;
+	const classIndex = getClassIndex(unparsed) + 1;
 
 	const str1 = unparsed.substring(0, classIndex);
 	const str2 = unparsed.substring(classIndex);

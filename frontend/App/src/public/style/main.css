@@ -1,16 +1,22 @@
 @import "tailwindcss";
+@import "./gradient-animations.css";
 
-
-    @property --color1{
+    @property --gradient-start {
       syntax: '<color>';
       inherits: false;
-      initial-value: #001d23
+      initial-value: #001d23;
     }
 
-    @property --color2{
+    @property --gradient-end {
       syntax: '<color>';
       inherits: false;
       initial-value: #003232;
+    }
+
+    @property --gradient-mid {
+      syntax: '<color>';
+      inherits: false;
+      initial-value: #ffc073;
     }
 
 @theme {
@@ -21,108 +27,6 @@
     --color-zr-light-green: #009479;
     --color-zr-orange: #dd5928;
     --color-zr-dark-orange: #ad2f17;
+    --color-zr-darker-orange: #8a1f0f;
     --color-zr-light-orange: #ff8000;
-
-    
-    --animate-gradient-1l: gradient-1l 10s ease-in-out infinite;
-    --animate-gradient-2l: gradient-2l 10s ease-in-out infinite;
-    --animate-gradient-3l: gradient-3l 100s ease-in-out infinite;
-
-
-    @keyframes gradient-1l {    
-        0% {
-            background-color: var(--color-red-400);
-        }
-        15% {
-            --tw-gradient-from: var(--color-zr-dark-green);
-            --tw-gradient-to: var(--color-zr-green);
-
-        }
-        30%{
-            --color1: var(--color-zr-green)
-            --color2: var(--color-zr-light-green)
-
-        }
-        45% {
-            --color1: var(--color-zr-light-green)
-            --color2: var(--color-zr-cream)
-
-        }
-        60% {
-            --color1: var(--color-zr-cream)
-            --color2: var(--color-zr-light-orange)
-
-        }
-        75% {
-            --color1: var(--color-zr-light-orange)
-            --color2: var(--color-zr-orange)
-
-        }
-        90% {
-            --color1: var(--color-zr-orange)
-            --color2: var(--color-zr-dark-orange)
-        }
-        100% {
-            --color1: var(--color-zr-dark-orange)
-            --color2: var(--color-zr-darker-green)
-
-        }
-    }
-
-    @keyframes gradient-2l {    
-        0% {
-            background: linear-gradient(to right, #003232, #004f4d);
-        }
-        15% {
-            background: linear-gradient(to right, #004f4d, #009479);
-        }
-        30%{
-            background: linear-gradient(to right, #009479, #ffc073);
-        }
-        45% {
-            background: linear-gradient(to right, #ffc073, #ff8000);
-        }
-        60% {
-            background: linear-gradient(to right, #ff8000, #dd5928);
-        }
-        75% {
-            background: linear-gradient(to right, #dd5928, #ad2f17);
-        }
-        90% {
-            background: linear-gradient(to right, #ad2f17, #001d23);
-        }
-        100% {
-            background: linear-gradient(to right, #001d23, #003232);
-        }
-    }
-    
-    @keyframes gradient-3l {    
-        0% {
-            background: #004f4d;
-        }
-        12% {
-            background: #009479;
-        }
-        24%{
-            background: #ffc073;
-        }
-        36% {
-            background: #ff8000;
-        }
-        48% {
-            background: #dd5928;
-        }
-        60% {
-            background: #ad2f17;
-        }
-        72% {
-            background: #001d23;
-        }
-        84% {
-            background: #003232;
-        }
-        100% {
-            background: #004f4d;
-        }
-    }
 }

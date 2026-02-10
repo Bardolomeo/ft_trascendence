@@ -1,0 +1,128 @@
+/* Gradient animations - One animation for all side columns, one for center */
+
+/* All side columns (1-6 and 8-13) use this animation */
+@keyframes gradient-side {
+    0% {
+        --gradient-start: var(--color-zr-darker-green);
+        --gradient-end: var(--color-zr-dark-green);
+    }
+    12.5% {
+        --gradient-start: var(--color-zr-dark-green);
+        --gradient-end: var(--color-zr-green);
+    }
+    25% {
+        --gradient-start: var(--color-zr-green);
+        --gradient-end: var(--color-zr-light-green);
+    }
+    37.5% {
+        --gradient-start: var(--color-zr-light-green);
+        --gradient-end: var(--color-zr-light-orange);
+    }
+    50% {
+        --gradient-start: var(--color-zr-light-orange);
+        --gradient-end: var(--color-zr-orange);
+    }
+    62.5% {
+        --gradient-start: var(--color-zr-orange);
+        --gradient-end: var(--color-zr-dark-orange);
+    }
+    75% {
+        --gradient-start: var(--color-zr-dark-orange);
+        --gradient-end: var(--color-zr-darker-orange);
+    }
+    87.5% {
+        --gradient-start: var(--color-zr-darker-orange);
+        --gradient-end: var(--color-zr-darker-green);
+    }
+    100% {
+        --gradient-start: var(--color-zr-darker-green);
+        --gradient-end: var(--color-zr-dark-green);
+    }
+}
+
+/* Center column (7) - from and to are always the same, cycling through colors, cream fixed in middle */
+@keyframes gradient-center {
+    0% {
+        --gradient-start: var(--color-zr-light-orange);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-light-orange);
+    }
+    12.5% {
+        --gradient-start: var(--color-zr-orange);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-orange);
+    }
+    25% {
+        --gradient-start: var(--color-zr-dark-orange);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-dark-orange);
+    }
+    37.5% {
+        --gradient-start: var(--color-zr-darker-orange);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-darker-orange);
+    }
+    50% {
+        --gradient-start: var(--color-zr-darker-green);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-darker-green);
+    }
+    62.5% {
+        --gradient-start: var(--color-zr-dark-green);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-dark-green);
+    }
+    75% {
+        --gradient-start: var(--color-zr-green);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-green);
+    }
+    87.5% {
+        --gradient-start: var(--color-zr-light-green);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-light-green);
+    }
+    100% {
+        --gradient-start: var(--color-zr-light-orange);
+        --gradient-mid: var(--color-zr-cream);
+        --gradient-end: var(--color-zr-light-orange);
+    }
+}
+
+/* Animation classes */
+.animate-gradient-side {
+    animation: gradient-side 60s ease-in-out infinite;
+}
+
+.animate-gradient-center {
+    animation: gradient-center 60s ease-in-out infinite;
+}
+
+/* Animation delay classes for 13 mirrored columns */
+.animation-delay-0 {
+    animation-delay: 0s;
+}
+
+.animation-delay-5 {
+    animation-delay: -5s;
+}
+
+.animation-delay-10 {
+    animation-delay: -10s;
+}
+
+.animation-delay-15 {
+    animation-delay: -15s;
+}
+
+.animation-delay-20 {
+    animation-delay: -20s;
+}
+
+.animation-delay-25 {
+    animation-delay: -25s;
+}
+
+.animation-delay-30 {
+    animation-delay: -30s;
+}

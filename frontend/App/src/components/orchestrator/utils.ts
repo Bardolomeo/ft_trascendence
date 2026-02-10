@@ -39,7 +39,7 @@ export function getClass(unparsed: string) {
 
 		//classIndex + 1 to skip first quotes in class
 		const classStringStart = unparsed.substring(classIndex + 1);
-		console.log("\n\n" + classStringStart + "\n\n");
+		//console.log("\n\n" + classStringStart + "\n\n");
 		const classString = classStringStart.substring(0, classStringStart.search('"'));
 
 		return classString;
@@ -119,7 +119,7 @@ export function getComponentFileContent(compName: string) {
 				return null;
 
 			//path to component file
-			const relativePath = dir.find((el) => (el.search(compName) > 0))
+			const relativePath = dir.find((el) => (el.search(compName) >= 0))
 			if (!relativePath)
 			{
 				console.error(`\nElement not found: ${compName}\n`);
@@ -156,7 +156,7 @@ export function deleteDoneFlags(page: string) {
 	let ret = "";
 
 	splitted.forEach((line) => {
-		ret += line.substring(1, line.length - 1);
+		ret += line.trim();
 	})
 
 	return ret;
@@ -165,7 +165,11 @@ export function deleteDoneFlags(page: string) {
 
 export function checkIfComponentDone(unparsed: string) {
 	const cn = getClass(unparsed);
-	if (cn!.search("____done____") > 0)
+	if (!cn)
+	{
+		return false;
+	}
+	if (cn.search("____done____") > 0)
 	{
 		return true;
 	}

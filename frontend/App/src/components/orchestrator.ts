@@ -1,7 +1,7 @@
 
 import fs from "fs";
 import { addDoneFlag, checkIfComponentDone, deleteDoneFlags, findComponentTagEnd, getClass, getComponentFileContent, getComponentName } from "./orchestrator/utils.ts";
-import { setProps } from "./orchestrator/props.ts";
+import { setProps, explodeProps } from "./orchestrator/props.ts";
 
 let ALL_DONE = false;
 
@@ -52,7 +52,7 @@ export default function findPage(route: string) {
 }
 
 
-function writeComponent(pageString: string, compName: string) {
+function writeComponent(pageString: string, compName: string, propsMap: Map<string, string>) {
 
 
 			// Flag to not append children to the same component in successive iterations
@@ -77,17 +77,20 @@ function writeComponent(pageString: string, compName: string) {
 			//Starts after found component closing bracket
 			const secondHalf = pageString.substring(splitIndex + 1);
 
-
 			if (isDone || !compName)
 			{
 				return {parsedPage: firstHalf, unparsedPage: secondHalf};
 			}
 
-			const compFile = getComponentFileContent(compName);
+			let compFile = getComponentFileContent(compName);
 			if (!compFile)
 			{
 				console.error(`\nError in component file fetch: ${compName}\n`);
+				return {parsedPage: firstHalf, unparsedPage: secondHalf};
 			}
+
+			// Explode props in component content
+			compFile = explodeProps(compFile, propsMap);
 
 			//Fragment with the updated component in 'newPageFragment'
 			const newPageFragment = firstHalf + compFile;
@@ -97,8 +100,6 @@ function writeComponent(pageString: string, compName: string) {
 
 
 function appendComponent(pageString: string): PageCompositingType | null {
-
-		const propsMap = new Map<string, string>();
 
 
 		//returns the value of the first class attribute found in pageString
@@ -112,11 +113,11 @@ function appendComponent(pageString: string): PageCompositingType | null {
 		//Getter for component name, search inside class attribute 
 		//return "" if does not find component name in class
 		const compName = getComponentName(firstClassFound);	
-		//if (compName) {
-			//handle prop declaration
-			setProps(propsMap, compName, pageString);
-		//}
-		return (writeComponent(pageString, compName));
+		
+		// Extract props from component tag and get modified page string
+		const { propsMap, modifiedPageString } = setProps(compName, pageString);
+		
+		return (writeComponent(modifiedPageString, compName, propsMap));
 		
 }
 

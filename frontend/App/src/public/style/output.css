@@ -262,6 +262,9 @@
   .grid-cols-7 {
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
+  .grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
   .grid-cols-13 {
     grid-template-columns: repeat(13, minmax(0, 1fr));
   }
@@ -282,6 +285,9 @@
   }
   .gap-48 {
     gap: calc(var(--spacing) * 48);
+  }
+  .gap-\[1px\] {
+    gap: 1px;
   }
   .overflow-hidden {
     overflow: hidden;
@@ -312,6 +318,13 @@
   }
   .bg-zr-darker-green {
     background-color: var(--color-zr-darker-green);
+  }
+  .bg-linear-to-b {
+    --tw-gradient-position: to bottom;
+    @supports (background-image: linear-gradient(in lab, red, red)) {
+      --tw-gradient-position: to bottom in oklab;
+    }
+    background-image: linear-gradient(var(--tw-gradient-stops));
   }
   .bg-linear-to-r {
     --tw-gradient-position: to right;
@@ -347,10 +360,16 @@
     --tw-gradient-from: var(--color-zr-light-green);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
-  .via-\[var\(--gradient-mid\)\] {
-    --tw-gradient-via: var(--gradient-mid);
+  .from-20\% {
+    --tw-gradient-from-position: 20%;
+  }
+  .via-zr-cream {
+    --tw-gradient-via: var(--color-zr-cream);
     --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
     --tw-gradient-stops: var(--tw-gradient-via-stops);
+  }
+  .via-50\% {
+    --tw-gradient-via-position: 50%;
   }
   .to-\[var\(--gradient-end\)\] {
     --tw-gradient-to: var(--gradient-end);
@@ -363,6 +382,13 @@
   .to-zr-dark-orange {
     --tw-gradient-to: var(--color-zr-dark-orange);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .to-zr-darker-green {
+    --tw-gradient-to: var(--color-zr-darker-green);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .to-80\% {
+    --tw-gradient-to-position: 80%;
   }
   .p-1 {
     padding: calc(var(--spacing) * 1);
@@ -505,79 +531,29 @@
     --gradient-end: var(--color-zr-dark-green);
   }
 }
-@keyframes gradient-center {
-  0% {
-    --gradient-start: var(--color-zr-light-orange);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-light-orange);
-  }
-  12.5% {
-    --gradient-start: var(--color-zr-orange);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-orange);
-  }
-  25% {
-    --gradient-start: var(--color-zr-dark-orange);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-dark-orange);
-  }
-  37.5% {
-    --gradient-start: var(--color-zr-darker-orange);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-darker-orange);
-  }
-  50% {
-    --gradient-start: var(--color-zr-darker-green);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-darker-green);
-  }
-  62.5% {
-    --gradient-start: var(--color-zr-dark-green);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-dark-green);
-  }
-  75% {
-    --gradient-start: var(--color-zr-green);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-green);
-  }
-  87.5% {
-    --gradient-start: var(--color-zr-light-green);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-light-green);
-  }
-  100% {
-    --gradient-start: var(--color-zr-light-orange);
-    --gradient-mid: var(--color-zr-cream);
-    --gradient-end: var(--color-zr-light-orange);
-  }
-}
 .animate-gradient-side {
-  animation: gradient-side 60s ease-in-out infinite;
+  animation: gradient-side 120s linear infinite;
 }
 .animate-gradient-center {
-  animation: gradient-center 60s ease-in-out infinite;
+  animation: gradient-center 120s linear infinite;
 }
-.animation-delay-0 {
+.animation-delay-col1 {
   animation-delay: 0s;
 }
-.animation-delay-5 {
-  animation-delay: -5s;
-}
-.animation-delay-10 {
-  animation-delay: -10s;
-}
-.animation-delay-15 {
+.animation-delay-col2 {
   animation-delay: -15s;
 }
-.animation-delay-20 {
-  animation-delay: -20s;
-}
-.animation-delay-25 {
-  animation-delay: -25s;
-}
-.animation-delay-30 {
+.animation-delay-col3 {
   animation-delay: -30s;
+}
+.animation-delay-col4 {
+  animation-delay: -45s;
+}
+.animation-delay-col5 {
+  animation-delay: -60s;
+}
+.animation-delay-col6 {
+  animation-delay: -75s;
 }
 @property --gradient-start {
   syntax: '<color>';

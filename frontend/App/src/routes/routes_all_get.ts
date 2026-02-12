@@ -7,9 +7,9 @@ import findPage  from "../components/orchestrator.ts";
 export async function routesAllGet(fastify: FastifyInstance, {}) {
 fastify.get("/*", async (req: FastifyRequest, reply: FastifyReply) => {
 		const route = req.url;
-    const response = new Response(await findPage(route), {
+    const response = new Response(findPage(route), {
       status: 200,
-      headers: { "Content-Type": "text/html" },
+      headers: { "Content-Type": route === "/favicon.ico" ? "image/x-icon" : "text/html" },
     });
     await reply.send(response);
   });

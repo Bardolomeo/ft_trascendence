@@ -21,8 +21,20 @@ const NULL_RES: PageCompositingType = {parsedPage: "", unparsedPage:""};
 export default function findPage(route: string) {
 	
 	let parsedRoute = route;
-	if (route == "/")
-		parsedRoute = "home";
+	switch (route) { 
+		case "/": {
+			parsedRoute = "home";
+			break;
+		}
+		case "/public/favicon.ico": {
+			return route;
+		}
+		default: {
+			break;
+		}
+	}
+
+
 	const file = `src/components/${parsedRoute}/index.html`;
 
 
@@ -159,7 +171,8 @@ function composePage(body: string) {
 			<head>
 				<meta charset="utf-8" />
 				<title>ULTRAPONG</title>
-				<link href="./public/style/output.css" rel="stylesheet">
+				<link href="./public/style/output.css" rel="stylesheet"/>
+				<link rel="icon" href="./public/favicon.ico"/>
 			</head>
 			\n${newPage}\n
 		</html>

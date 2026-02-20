@@ -17,7 +17,7 @@ fastify.register(fastifyFormbody);
 const __dirname = path.resolve(path.dirname(""));
 
 fastify.register(fastifyStatic, {
-    root: path.join(__dirname, "/src/public/"),
+    root: path.join(__dirname, "/public/"),
     prefix: "/public/"
 })
 
@@ -29,8 +29,8 @@ fastify.register(fastifyStatic, {
 })
 
 fastify.register(fastifyStatic, {
-    root: path.join(__dirname, "/src/components/"),
-    prefix: "/components/",
+    root: path.join(__dirname, "/src/orchestrator/"),
+    prefix: "/orchestrator/",
     decorateReply: false
 })
 

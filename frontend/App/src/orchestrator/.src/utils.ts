@@ -96,7 +96,7 @@ export function findComponentTagEnd(unparsed: string) {
 export const getComponentsDirectoryListing = () => {
 
 	//TODO edit to accept generic path
-	const res = fs.readdirSync("./src/components", {recursive: true, encoding: "utf8"});
+	const res = fs.readdirSync("./src/orchestrator", {recursive: true, encoding: "utf8"});
 	return res;
 }
 
@@ -133,7 +133,7 @@ export function getComponentFileContent(compName: string) {
 			//fetch from server and add to cache if not cached
 			if (!fileContent) {
 				//TODO edit for generic path
-				fileContent = fs.readFileSync("./src/components/" + relativePath, {encoding: "utf8"});
+				fileContent = fs.readFileSync("./src/orchestrator/" + relativePath, {encoding: "utf8"});
 				if (!fileContent)
 					return "";
 				FILE_CACHE.set(compName, fileContent);

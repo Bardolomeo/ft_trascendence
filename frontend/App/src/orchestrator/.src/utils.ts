@@ -4,10 +4,12 @@ const NEEDLE = "class="
 const FILE_CACHE = new Map<string, string>();
 
 function foundUppercaseLetter(cls: string) {
-	for (let i = NEEDLE.length + 2; cls[i] !== '"' && i < cls.length; i++)
+	//i == 1 to skip quotes
+	for (let i = 1; cls[i] !== '"' && i < cls.length; i++)
 	{
 		if (cls[i] >= 'A' && cls[i] <= 'Z' && i >= 0)
-			return true;	
+			return true;
+		console.log(cls);
 	}
 	return false;
 }

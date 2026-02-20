@@ -30,3 +30,20 @@
     --color-zr-darker-orange: #8a1f0f;
     --color-zr-light-orange: #ff8000;
 }
+
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: ease-in-out;
+		animation-duration: 4s;
+		animation-iteration-count: infinite;
+  }
+  50% {
+    transform: none;
+    animation-timing-function: ease-in-out;
+		animation-duration: 4s;
+		animation-iteration-count: infinite;
+  }
+}
+

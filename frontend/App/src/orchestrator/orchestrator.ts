@@ -117,7 +117,7 @@ function appendComponent(pageString: string): PageCompositingType | null {
 		//returns the value of the first class attribute found in pageString
 		NULL_RES.parsedPage = pageString;
 		const firstClassFound = getClass(pageString);
-		//console.log(firstClassFound);
+		console.log(firstClassFound);
 		if (!firstClassFound) {
 			return NULL_RES;
 		}

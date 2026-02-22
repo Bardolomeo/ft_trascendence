@@ -1,61 +1,12 @@
 import sqlite3 from 'sqlite3';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as http from 'http';
 
 const DATA_DIR = './data';
 const DB_PATH = path.join(DATA_DIR, 'database.db');
-const BACKUP_SERVICE_URL = 'http://backup-service:3001';
-
-// Function to request database from backup service
-const requestDatabaseFromBackup = (): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        console.log('📥 Requesting database from backup service...');
-        
-        const req = http.get(`${BACKUP_SERVICE_URL}/get-database`, (res) => {
-            if (res.statusCode === 200) {
-                // Ensure data directory exists
-                if (!fs.existsSync(DATA_DIR)) {
-                    fs.mkdirSync(DATA_DIR, { recursive: true });
-                    console.log('📁 Created data directory');
-                }
-                
-                const writeStream = fs.createWriteStream(DB_PATH);
-                res.pipe(writeStream);
-                
-                writeStream.on('finish', () => {
-                    console.log('✅ Database received and saved to Login_service/data/');
-                    resolve();
-                });
-                
-                writeStream.on('error', (err) => {
-                    console.error('❌ Error saving database:', err);
-                    reject(err);
-                });
-            } else {
-                console.log('⚠️ No database available from backup service');
-                resolve(); // Continue without backup
-            }
-        });
-        
-        req.on('error', (err) => {
-            console.log('⚠️ Could not reach backup service:', err.message);
-            resolve(); // Continue without backup
-        });
-        
-        req.setTimeout(5000, () => {
-            console.log('⚠️ Backup service request timed out');
-            req.destroy();
-            resolve(); // Continue without backup
-        });
-    });
-};
 
 const dbInitialized = new Promise<sqlite3.Database>(async (resolve, reject) => {
     try {
-        // Always request database from backup service
-        await requestDatabaseFromBackup();
-        
         // Step 2: Ensure data directory exists
         if (!fs.existsSync(DATA_DIR)) {
             fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -69,26 +20,40 @@ const dbInitialized = new Promise<sqlite3.Database>(async (resolve, reject) => {
                 reject(err);
             } else {
                 console.log('✅ Connected to the SQLite database.');
-                
                 // Step 4: Check if users table exists, create if not
                 db.serialize(() => {
-                    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='users'", (err, row) => {
+                    const query = `SELECT name FROM sqlite_master WHERE type='table' AND name='users'`;
+                    db.get(query, (err, row) => {
                         if (err) {
                             console.error('❌ Error checking for users table:', err.message);
                             reject(err);
                         } else if (!row) {
-                            // No users table - create it
                             console.log('📋 No users table found - creating it...');
+                            // it is better to seperate this into 2 different tables. for semplicity i will keep it in one table for now
                             db.run(`CREATE TABLE users (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                username TEXT NOT NULL UNIQUE,
-                                password TEXT NOT NULL
+                                username TEXT NOT NULL UNIQUE COLLATE NOCASE,
+                                email TEXT UNIQUE COLLATE NOCASE,
+                                password_hash TEXT NOT NULL,
+                                TwoFa_status INTEGER DEFAULT 0,
+                                TwoFa_secret TEXT DEFAULT NULL,
+                                TwoFaTempSecret TEXT DEFAULT NULL,
+                                TwoFaTimeStamp INTEGER DEFAULT 0
                             )`, (err) => {
                                 if (err) {
                                     console.error('❌ Error creating users table:', err.message);
                                     reject(err);
                                 } else {
                                     console.log('✅ Users table created successfully.');
+                                    
+                                    // Create indexes for better query performance
+                                    db.run(`CREATE INDEX idx_users_username ON users(username)`, (err) => {
+                                        if (err) console.log('⚠️ Username index already exists or error:', err.message);
+                                    });
+                                    
+                                    db.run(`CREATE INDEX idx_users_email ON users(email)`, (err) => {
+                                        if (err) console.log('⚠️ Email index already exists or error:', err.message);
+                                    });
                                     resolve(db);
                                 }
                             });

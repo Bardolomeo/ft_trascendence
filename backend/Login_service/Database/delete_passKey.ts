@@ -1,0 +1,1 @@
+// function: set a secret or temp secret to null in the database, based on a time frame or user request

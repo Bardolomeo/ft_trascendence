@@ -199,6 +199,9 @@
   .left-0 {
     left: calc(var(--spacing) * 0);
   }
+  .-z-10 {
+    z-index: calc(10 * -1);
+  }
   .col-span-1 {
     grid-column: span 1 / span 1;
   }
@@ -258,6 +261,9 @@
     --tw-scale-y: 125%;
     --tw-scale-z: 125%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+  .animate-\[float\] {
+    animation: float;
   }
   .grid-cols-7 {
     grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -569,6 +575,20 @@
   syntax: '<color>';
   inherits: false;
   initial-value: #ffc073;
+}
+@keyframes float {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: ease-in-out;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+  }
+  50% {
+    transform: none;
+    animation-timing-function: ease-in-out;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+  }
 }
 @property --tw-scale-x {
   syntax: "*";

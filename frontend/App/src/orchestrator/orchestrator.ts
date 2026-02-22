@@ -1,7 +1,7 @@
 
 import fs from "fs";
-import { addDoneFlag, checkIfComponentDone, deleteDoneFlags, findComponentTagEnd, getClass, getComponentFileContent, getComponentName } from "./orchestrator/utils.ts";
-import { setProps, explodeProps } from "./orchestrator/props.ts";
+import { addDoneFlag, checkIfComponentDone, deleteDoneFlags, findComponentTagEnd, getClass, getComponentFileContent, getComponentName } from "./.src/utils.ts";
+import { setProps, explodeProps } from "./.src/props.ts";
 
 let ALL_DONE = false;
 
@@ -13,8 +13,8 @@ type PageCompositingType = {
 
 const NULL_RES: PageCompositingType = {parsedPage: "", unparsedPage:""};
 
-//fetfh index.html file for the route if file /components/{route}/index.html exists
-//where /components/ is the static route for /src/components
+//fetfh index.html file for the route if file /orchestrator/{route}/index.html existscomponentscomponents
+//where /orchestrator/ is the static route for /src/orchestrator
 //Append children recursively
 //return notFound otherwise
 // THIS IS SERVER SIDE
@@ -35,7 +35,7 @@ export default function findPage(route: string) {
 	}
 
 
-	const file = `src/components/${parsedRoute}/index.html`;
+	const file = `src/orchestrator/${parsedRoute}/index.html`;
 
 
 	//file reader
@@ -117,7 +117,7 @@ function appendComponent(pageString: string): PageCompositingType | null {
 		//returns the value of the first class attribute found in pageString
 		NULL_RES.parsedPage = pageString;
 		const firstClassFound = getClass(pageString);
-		//console.log(firstClassFound);
+		console.log(firstClassFound);
 		if (!firstClassFound) {
 			return NULL_RES;
 		}

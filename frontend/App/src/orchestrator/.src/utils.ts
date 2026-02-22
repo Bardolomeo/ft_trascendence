@@ -4,10 +4,12 @@ const NEEDLE = "class="
 const FILE_CACHE = new Map<string, string>();
 
 function foundUppercaseLetter(cls: string) {
-	for (let i = NEEDLE.length + 2; cls[i] !== '"' && i < cls.length; i++)
+	//i == 1 to skip quotes
+	for (let i = 1; cls[i] !== '"' && i < cls.length; i++)
 	{
 		if (cls[i] >= 'A' && cls[i] <= 'Z' && i >= 0)
-			return true;	
+			return true;
+		console.log(cls);
 	}
 	return false;
 }
@@ -96,7 +98,7 @@ export function findComponentTagEnd(unparsed: string) {
 export const getComponentsDirectoryListing = () => {
 
 	//TODO edit to accept generic path
-	const res = fs.readdirSync("./src/components", {recursive: true, encoding: "utf8"});
+	const res = fs.readdirSync("./src/orchestrator", {recursive: true, encoding: "utf8"});
 	return res;
 }
 
@@ -133,7 +135,7 @@ export function getComponentFileContent(compName: string) {
 			//fetch from server and add to cache if not cached
 			if (!fileContent) {
 				//TODO edit for generic path
-				fileContent = fs.readFileSync("./src/components/" + relativePath, {encoding: "utf8"});
+				fileContent = fs.readFileSync("./src/orchestrator/" + relativePath, {encoding: "utf8"});
 				if (!fileContent)
 					return "";
 				FILE_CACHE.set(compName, fileContent);

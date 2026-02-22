@@ -1,6 +1,6 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import fs from "fs";
-import findPage  from "../components/orchestrator.ts";
+import findPage  from "../orchestrator/orchestrator.ts";
 
 
 //remember that defined route have precedence over wildcard
@@ -16,9 +16,9 @@ fastify.get("/*", async (req: FastifyRequest, reply: FastifyReply) => {
 }
 
 export async function listComponents(fastify: FastifyInstance, {}) {
-fastify.get("/components", async (req: FastifyRequest, reply: FastifyReply) => {
-		const componentsListing = fs.readdirSync("./src/components", {recursive: true});
-    const response = new Response(JSON.stringify(componentsListing), {
+fastify.get("/orchestrator", async (req: FastifyRequest, reply: FastifyReply) => {
+		const orchestratorListing = fs.readdirSync("./src/orchestrator", {recursive: true});
+    const response = new Response(JSON.stringify(orchestratorListing), {
       status: 200,
       headers: { "Content-Type": "text/json" },
     });
